@@ -17,7 +17,7 @@ model Pathway {
   updatedAt DateTime @updatedAt
 }
 
-model Documents {
+model Document {
   id       String   @id @default(cuid())
   name     String   @unique
   fileType FileType
