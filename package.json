@@ -11,6 +11,7 @@
     "check": "biome check --write --unsafe ./src"
   },
   "dependencies": {
+    "@clerk/nextjs": "^6.31.5",
     "@hookform/resolvers": "^5.2.1",
     "@radix-ui/react-alert-dialog": "^1.1.15",
     "@radix-ui/react-avatar": "^1.1.10",
