@@ -5,7 +5,7 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 
-export default function ChatLayout({
+export default function AdminDashboardLayout({
   children,
 }: {
   children: React.ReactNode;
