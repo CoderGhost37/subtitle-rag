@@ -1,4 +1,4 @@
-import { ChatSidebar } from "@/components/chat/sidebar";
+import { AdminSidebar } from "@/components/admin/sidebar";
 import {
   SidebarInset,
   SidebarProvider,
@@ -12,7 +12,7 @@ export default function AdminDashboardLayout({
 }) {
   return (
     <SidebarProvider>
-      <ChatSidebar />
+      <AdminSidebar />
       <SidebarInset>
         <main className="h-svh overflow-hidden">
           <SidebarTrigger className="-ml-1" />

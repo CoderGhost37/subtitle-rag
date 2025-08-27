@@ -10,14 +10,19 @@ import {
   IconListDetails,
   IconUsers,
 } from "@tabler/icons-react";
+import Image from "next/image";
+import Link from "next/link";
 import type * as React from "react";
-
 // import { NavMain } from "@/components/nav-main"
 import { NavUser } from "@/components/nav-user";
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
 } from "@/components/ui/sidebar";
 
 const _data = {
@@ -122,21 +127,21 @@ export function ChatSidebar({
                         </Button>
                     </SidebarMenuItem>
                 </SidebarMenu> */}
-      {/* <SidebarHeader>
-                <SidebarMenu>
-                    <SidebarMenuItem>
-                        <SidebarMenuButton
-                            asChild
-                            className="data-[slot=sidebar-menu-button]:!p-1.5"
-                        >
-                            <a href="#">
-                                <IconInnerShadowTop className="!size-5" />
-                                <span className="text-base font-semibold">Acme Inc.</span>
-                            </a>
-                        </SidebarMenuButton>
-                    </SidebarMenuItem>
-                </SidebarMenu>
-            </SidebarHeader> */}
+      <SidebarHeader>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              asChild
+              className="data-[slot=sidebar-menu-button]:!px-1.5 py-8"
+            >
+              <Link href="/" className="flex items-center gap-2">
+                <Image src="/logo.svg" alt="Logo" width={48} height={48} />
+                <span className="text-2xl font-semibold">Chai GPT</span>
+              </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarHeader>
       <SidebarContent>{/* <NavMain items={data.navMain} /> */}</SidebarContent>
       <SidebarFooter>
         <NavUser />
