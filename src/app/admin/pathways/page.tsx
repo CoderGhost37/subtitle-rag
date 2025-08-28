@@ -1,0 +1,20 @@
+import { Pathways } from "@/components/admin/pathway/pathways";
+
+export default function PathwaysPage() {
+  return (
+    <main>
+      <div className="space-y-6">
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <p className="text-3xl font-bold">Learning Pathways</p>
+            <p className="mt-1 text-muted-foreground">
+              Manage pathways and view their documents
+            </p>
+          </div>
+        </div>
+
+        <Pathways />
+      </div>
+    </main>
+  );
+}

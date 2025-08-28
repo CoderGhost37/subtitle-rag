@@ -1,7 +1,7 @@
 import { BookOpen, FileText, TrendingUp, Upload, Users } from "lucide-react";
 import Link from "next/link";
 import { Suspense } from "react";
-import { getStats } from "@/actions/get-stats";
+import { getStats } from "@/actions/admin/get-stats";
 import { StatCard } from "@/components/admin/stat-card";
 import { buttonVariants } from "@/components/ui/button";
 import {

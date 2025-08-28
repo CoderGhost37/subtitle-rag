@@ -13,6 +13,8 @@ model Pathway {
   title       String  @unique
   description String?
 
+  documents Document[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -21,7 +23,11 @@ model Document {
   id       String   @id @default(cuid())
   name     String   @unique
   fileType FileType
+  fileSize String
   sourceId String
+
+  pathwayId String
+  pathway   Pathway @relation(fields: [pathwayId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
