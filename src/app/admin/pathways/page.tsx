@@ -1,3 +1,4 @@
+import { PathwayDialog } from "@/components/admin/pathway/pathway-dialog-form";
 import { Pathways } from "@/components/admin/pathway/pathways";
 
 export default function PathwaysPage() {
@@ -11,6 +12,7 @@ export default function PathwaysPage() {
               Manage pathways and view their documents
             </p>
           </div>
+          <PathwayDialog />
         </div>
 
         <Pathways />

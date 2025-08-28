@@ -33,7 +33,7 @@ export function Pathway({ pathway }: { pathway: PathwayType }) {
     <Card className="overflow-hidden">
       <Collapsible open={open} onOpenChange={setOpen}>
         <CollapsibleTrigger asChild>
-          <CardHeader className="hover:bg-gray-50 cursor-pointer transition-colors">
+          <CardHeader className="cursor-pointer transition-colors">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="h-12 w-12 rounded-lg flex items-center justify-center text-2xl">
