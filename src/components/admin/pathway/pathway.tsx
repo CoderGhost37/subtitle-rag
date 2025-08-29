@@ -70,20 +70,20 @@ export function Pathway({ pathway }: { pathway: PathwayType }) {
         <CollapsibleContent>
           <CardContent className="pt-0">
             {pathway.documents.length > 0 ? (
-              <div className="space-y-3">
-                <div className="text-sm font-medium text-gray-700 border-b pb-2">
+              <div className="mt-4 space-y-3">
+                <div className="text-sm font-medium text-muted-foreground border-b pb-2">
                   Documents ({pathway.documents.length})
                 </div>
                 {pathway.documents.map((doc) => (
                   <div
                     key={doc.id}
-                    className="flex items-center justify-between p-3 border rounded-lg bg-gray-50"
+                    className="flex items-center justify-between p-3 border rounded-lg"
                   >
                     <div className="flex items-center gap-3">
-                      <FileText className="h-5 w-5 text-gray-500" />
+                      <FileText className="h-5 w-5 text-muted-foreground" />
                       <div>
-                        <p className="font-medium text-gray-900">{doc.name}</p>
-                        <div className="flex items-center gap-4 text-xs text-gray-500">
+                        <p className="font-medium">{doc.name}</p>
+                        <div className="mt-1 flex items-center gap-4 text-xs text-gray-500">
                           <span className="flex items-center gap-1">
                             <Calendar className="h-3 w-3" />
                             {doc.createdAt.toLocaleDateString()}
@@ -93,10 +93,9 @@ export function Pathway({ pathway }: { pathway: PathwayType }) {
                       </div>
                     </div>
                     <Button
-                      variant="ghost"
-                      size="sm"
-                      // onClick={() => handleDeleteDocument(doc.id, pathway.id)}
-                      className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                      variant="destructive"
+                      size="icon"
+                    // onClick={() => handleDeleteDocument(doc.id, pathway.id)}
                     >
                       <Trash2 className="h-4 w-4" />
                     </Button>
@@ -104,7 +103,7 @@ export function Pathway({ pathway }: { pathway: PathwayType }) {
                 ))}
               </div>
             ) : (
-              <div className="text-center py-8 text-gray-500">
+              <div className="text-center py-8 text-muted-foreground">
                 <FileText className="h-12 w-12 mx-auto mb-3 opacity-30" />
                 <p className="text-sm font-medium">No documents uploaded yet</p>
                 <p className="text-xs mb-4">
