@@ -6,6 +6,8 @@ import Image from "next/image";
 import React from "react";
 import { useDropzone } from "react-dropzone";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+
 import type { PathwayBasicInfoType } from "@/actions/admin/get-pathways-basic-info";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
@@ -36,6 +38,7 @@ import { type UploadSchemaType, uploadSchema } from "@/schemas/upload";
 import { getPathwayIcon } from "@/utils/getPathwayIcon";
 
 export function UploadForm({ pathways }: { pathways: PathwayBasicInfoType[] }) {
+  const [files, setFiles] = React.useState<File[]>([]);
   const [isPending, startTransition] = React.useTransition();
   const form = useForm<UploadSchemaType>({
     resolver: zodResolver(uploadSchema),
@@ -51,6 +54,7 @@ export function UploadForm({ pathways }: { pathways: PathwayBasicInfoType[] }) {
       form.setValue("files", [...prevFiles, ...acceptedFiles], {
         shouldValidate: true,
       });
+      setFiles((prev) => [...prev, ...acceptedFiles]);
     }
   };
 
@@ -64,14 +68,6 @@ export function UploadForm({ pathways }: { pathways: PathwayBasicInfoType[] }) {
     multiple: true,
   });
 
-  const _formatBytes = (bytes: number) => {
-    if (bytes === 0) return "0 Bytes";
-    const k = 1024;
-    const sizes = ["Bytes", "KB", "MB", "GB"];
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return `${parseFloat((bytes / k ** i).toFixed(2))} ${sizes[i]}`;
-  };
-
   const handleDelete = (fileName: string) => {
     const prevFiles = form.getValues("files");
     form.setValue(
@@ -79,19 +75,29 @@ export function UploadForm({ pathways }: { pathways: PathwayBasicInfoType[] }) {
       prevFiles.filter((file) => file.name !== fileName),
       { shouldValidate: true },
     );
+    setFiles((prev) => prev.filter((file) => file.name !== fileName));
   };
 
-  function onSubmit(_values: UploadSchemaType) {
-    startTransition(() => {
-      //   createPathway(values).then((res) => {
-      //     if (res.success) {
-      //       toast.success(res.message);
-      //       form.reset();
-      //       setIsOpen(false);
-      //     } else {
-      //       toast.error(res.message);
-      //     }
-      //   });
+  async function onSubmit(values: UploadSchemaType) {
+    startTransition(async () => {
+      const formData = new FormData();
+      formData.append("pathwayId", values.pathwayId);
+      for (const file of values.files) {
+        formData.append("files", file);
+      }
+
+      const res = await fetch("/api/embedding", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        toast.success("Files uploaded successfully");
+        form.reset();
+      } else {
+        toast.error(data.message);
+      }
     });
   }
 
@@ -196,7 +202,7 @@ export function UploadForm({ pathways }: { pathways: PathwayBasicInfoType[] }) {
           <CardDescription>Files you have selected for upload</CardDescription>
         </CardHeader>
         <CardContent>
-          {form.getValues("files").length === 0 ? (
+          {files.length === 0 ? (
             <Alert>
               <FileText className="h-4 w-4" />
               <AlertDescription>
@@ -206,7 +212,7 @@ export function UploadForm({ pathways }: { pathways: PathwayBasicInfoType[] }) {
             </Alert>
           ) : (
             <div className="space-y-4">
-              {form.getValues("files").map((document) => (
+              {files.map((document) => (
                 <div
                   key={document.name}
                   className="flex items-center justify-between p-4 border rounded-lg"

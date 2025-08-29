@@ -4,7 +4,7 @@ import { currentUser } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { db } from "@/lib/prisma";
-import type { PathwaySchemaType } from "@/schemas/pathway";
+import { type PathwaySchemaType, pathwaySchema } from "@/schemas/pathway";
 
 export async function createPathway(values: PathwaySchemaType) {
   const user = await currentUser();
@@ -13,11 +13,16 @@ export async function createPathway(values: PathwaySchemaType) {
   }
 
   try {
+    const validateFields = pathwaySchema.safeParse(values);
+    if (!validateFields.success) {
+      return {
+        success: false,
+        message: "Invalid input",
+      };
+    }
+
     await db.pathway.create({
-      data: {
-        title: values.title,
-        description: values.description,
-      },
+      data: validateFields.data,
     });
 
     revalidatePath("/admin/pathways");
