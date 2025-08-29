@@ -1,8 +1,8 @@
 "use client";
 
-import React from "react";
 import type { PathwayBasicInfoType } from "@/actions/admin/get-pathways-basic-info";
 import { usePathwayStore } from "@/hooks/use-pathway";
+import { usePathwayPickerDialogStore } from "@/hooks/use-pathway-picker-dialog";
 import { PathwayPickerDialog } from "./pathway-picker-dialog";
 
 export function ChatInitial({
@@ -11,7 +11,7 @@ export function ChatInitial({
   pathways: PathwayBasicInfoType[];
 }) {
   const { pathwayName, pathwayId, setPathway } = usePathwayStore();
-  const [open, setOpen] = React.useState(true);
+  const { open, toggle } = usePathwayPickerDialogStore();
   return (
     <div>
       <div className="flex-1 flex flex-col">
@@ -31,7 +31,7 @@ export function ChatInitial({
 
       <PathwayPickerDialog
         open={open}
-        onOpenChange={() => setOpen((prev) => !prev)}
+        onOpenChange={toggle}
         pathways={pathways}
         onSelect={setPathway}
       />

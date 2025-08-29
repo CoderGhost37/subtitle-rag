@@ -26,6 +26,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { Button } from "../ui/button";
+import { PathwaySwitcher } from "./pathway-switcher";
 
 const _data = {
   navMain: [
@@ -152,6 +153,14 @@ export function ChatSidebar({
                   <span>New Chat</span>
                 </Button>
               </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton asChild>
+              <PathwaySwitcher />
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
