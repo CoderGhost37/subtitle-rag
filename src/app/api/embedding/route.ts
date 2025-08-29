@@ -69,6 +69,7 @@ export async function POST(req: Request) {
           metadata: {
             ...chunk.metadata,
             sourceId,
+            pathwayId,
           },
         };
       });

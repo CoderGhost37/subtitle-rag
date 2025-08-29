@@ -15,7 +15,7 @@ export default function ChatLayout({
       <ChatSidebar />
       <SidebarInset>
         <main className="h-svh overflow-hidden">
-          <SidebarTrigger className="-ml-1" />
+          <SidebarTrigger className="-ml-1 absolute top-2 left-2" />
           {children}
         </main>
       </SidebarInset>

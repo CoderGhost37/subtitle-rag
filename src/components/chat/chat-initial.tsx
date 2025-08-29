@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import type { PathwayBasicInfoType } from "@/actions/admin/get-pathways-basic-info";
 import { usePathwayStore } from "@/hooks/use-pathway";
 import { usePathwayPickerDialogStore } from "@/hooks/use-pathway-picker-dialog";
+import { ChatInterface } from "./chat-interface";
 import { PathwayPickerDialog } from "./pathway-picker-dialog";
 
 export function ChatInitial({
@@ -23,7 +24,7 @@ export function ChatInitial({
     <div>
       <div className="flex-1 flex flex-col">
         {pathwayId && pathwayName ? (
-          <p>CHAT with {pathwayName}</p>
+          <ChatInterface />
         ) : (
           <div className="flex-1 h-full flex items-center justify-center">
             <div className="text-center">
