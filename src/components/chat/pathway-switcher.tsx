@@ -18,11 +18,11 @@ export function PathwaySwitcher() {
             <Image
               src={getPathwayIcon(pathwayName)}
               alt={pathwayName}
-              width={40}
-              height={40}
+              width={30}
+              height={30}
             />
           )}
-          <span className="text-sm font-medium truncate">
+          <span className="font-medium truncate">
             {pathwayName || "No pathway selected"}
           </span>
         </div>

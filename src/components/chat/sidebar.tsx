@@ -13,6 +13,7 @@ import {
 import { Plus } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import type * as React from "react";
 // import { NavMain } from "@/components/nav-main"
 import { NavUser } from "@/components/nav-user";
@@ -25,6 +26,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { usePathwayStore } from "@/hooks/use-pathway";
 import { Button } from "../ui/button";
 import { PathwaySwitcher } from "./pathway-switcher";
 
@@ -109,6 +111,13 @@ const _data = {
 export function ChatSidebar({
   ...props
 }: React.ComponentProps<typeof Sidebar>) {
+  const router = useRouter();
+  const { clearPathway } = usePathwayStore();
+
+  const newChat = () => {
+    clearPathway();
+    router.push("/");
+  };
   return (
     <Sidebar collapsible="offcanvas" {...props}>
       {/* <SidebarMenu>
@@ -147,12 +156,10 @@ export function ChatSidebar({
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton asChild>
-              <Link href="/">
-                <Button size="sm" className="rounded w-full">
-                  <Plus className="size-4" />
-                  <span>New Chat</span>
-                </Button>
-              </Link>
+              <Button size="sm" className="rounded w-full" onClick={newChat}>
+                <Plus className="size-4" />
+                <span>New Chat</span>
+              </Button>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>

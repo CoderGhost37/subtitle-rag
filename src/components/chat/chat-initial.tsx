@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import type { PathwayBasicInfoType } from "@/actions/admin/get-pathways-basic-info";
 import { usePathwayStore } from "@/hooks/use-pathway";
 import { usePathwayPickerDialogStore } from "@/hooks/use-pathway-picker-dialog";
@@ -12,6 +13,12 @@ export function ChatInitial({
 }) {
   const { pathwayName, pathwayId, setPathway } = usePathwayStore();
   const { open, toggle } = usePathwayPickerDialogStore();
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+  useEffect(() => {
+    toggle();
+  }, []);
+
   return (
     <div>
       <div className="flex-1 flex flex-col">
