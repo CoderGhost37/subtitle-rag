@@ -10,6 +10,7 @@ import {
   IconListDetails,
   IconUsers,
 } from "@tabler/icons-react";
+import { Plus } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import type * as React from "react";
@@ -24,6 +25,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { Button } from "../ui/button";
 
 const _data = {
   navMain: [
@@ -137,6 +139,18 @@ export function ChatSidebar({
               <Link href="/" className="flex items-center gap-2">
                 <Image src="/logo.svg" alt="Logo" width={48} height={48} />
                 <span className="text-2xl font-semibold">Chai GPT</span>
+              </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton asChild>
+              <Link href="/">
+                <Button size="sm" className="rounded w-full">
+                  <Plus className="size-4" />
+                  <span>New Chat</span>
+                </Button>
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>

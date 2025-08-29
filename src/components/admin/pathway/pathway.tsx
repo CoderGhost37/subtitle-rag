@@ -95,7 +95,7 @@ export function Pathway({ pathway }: { pathway: PathwayType }) {
                     <Button
                       variant="destructive"
                       size="icon"
-                    // onClick={() => handleDeleteDocument(doc.id, pathway.id)}
+                      // onClick={() => handleDeleteDocument(doc.id, pathway.id)}
                     >
                       <Trash2 className="h-4 w-4" />
                     </Button>
