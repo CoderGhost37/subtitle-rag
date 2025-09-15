@@ -4,19 +4,30 @@ import {
   IconCamera,
   IconChartBar,
   IconDashboard,
+  IconDots,
+  IconEdit,
   IconFileAi,
   IconFileDescription,
   IconFolder,
   IconListDetails,
+  IconTrash,
   IconUsers,
 } from "@tabler/icons-react";
 import { Plus } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import type * as React from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { type ComponentProps, useEffect, useState } from "react";
+import { deleteChat } from "@/actions/chat/delete-chat";
+import { renameChat } from "@/actions/chat/rename-chat";
 // import { NavMain } from "@/components/nav-main"
 import { NavUser } from "@/components/nav-user";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import {
   Sidebar,
   SidebarContent,
@@ -108,37 +119,77 @@ const _data = {
   ],
 };
 
+type Chat = {
+  id: string;
+  title: string;
+  updatedAt: Date;
+  pathwayId: string;
+  pathway: {
+    title: string;
+  };
+};
+
+interface ChatSidebarProps extends ComponentProps<typeof Sidebar> {
+  chats: Chat[];
+}
+
 export function ChatSidebar({
+  chats: initialChats,
   ...props
-}: React.ComponentProps<typeof Sidebar>) {
+}: ChatSidebarProps) {
   const router = useRouter();
+  const pathname = usePathname();
   const { clearPathway } = usePathwayStore();
+  const [chats, setChats] = useState<Chat[]>(initialChats);
+  const [editingChat, setEditingChat] = useState<string | null>(null);
+  const [editTitle, setEditTitle] = useState("");
 
   const newChat = () => {
     clearPathway();
     router.push("/");
   };
+
+  const handleDeleteChat = async (chatId: string) => {
+    const result = await deleteChat(chatId);
+    if (result.success) {
+      setChats((prev) => prev.filter((chat) => chat.id !== chatId));
+      if (pathname === `/chat/${chatId}`) {
+        router.push("/");
+      }
+    }
+  };
+
+  const handleRenameChat = async (chatId: string) => {
+    if (!editTitle.trim()) return;
+
+    const result = await renameChat(chatId, editTitle);
+    if (result.success) {
+      setChats((prev) =>
+        prev.map((chat) =>
+          chat.id === chatId ? { ...chat, title: editTitle } : chat,
+        ),
+      );
+      setEditingChat(null);
+      setEditTitle("");
+    }
+  };
+
+  const startEditing = (chat: Chat) => {
+    setEditingChat(chat.id);
+    setEditTitle(chat.title);
+  };
+
+  const cancelEditing = () => {
+    setEditingChat(null);
+    setEditTitle("");
+  };
+
+  useEffect(() => {
+    setChats(initialChats);
+  }, [initialChats]);
+
   return (
     <Sidebar collapsible="offcanvas" {...props}>
-      {/* <SidebarMenu>
-                    <SidebarMenuItem className="flex items-center gap-2">
-                        <SidebarMenuButton
-                            tooltip="Quick Create"
-                            className="bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground min-w-8 duration-200 ease-linear"
-                        >
-                            <IconCirclePlusFilled />
-                            <span>Quick Create</span>
-                        </SidebarMenuButton>
-                        <Button
-                            size="icon"
-                            className="size-8 group-data-[collapsible=icon]:opacity-0"
-                            variant="outline"
-                        >
-                            <IconMail />
-                            <span className="sr-only">Inbox</span>
-                        </Button>
-                    </SidebarMenuItem>
-                </SidebarMenu> */}
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
@@ -164,15 +215,91 @@ export function ChatSidebar({
           </SidebarMenuItem>
         </SidebarMenu>
 
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton asChild>
-              <PathwaySwitcher />
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
+        {pathname === "/" && (
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <SidebarMenuButton asChild>
+                <PathwaySwitcher />
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        )}
       </SidebarHeader>
-      <SidebarContent>{/* <NavMain items={data.navMain} /> */}</SidebarContent>
+
+      <SidebarContent>
+        {chats.length > 0 ? (
+          <SidebarMenu>
+            {chats.map((chat) => (
+              <SidebarMenuItem key={chat.id}>
+                <div className="flex items-center justify-between w-full group">
+                  {editingChat === chat.id ? (
+                    <input
+                      type="text"
+                      value={editTitle}
+                      onChange={(e) => setEditTitle(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          handleRenameChat(chat.id);
+                        } else if (e.key === "Escape") {
+                          cancelEditing();
+                        }
+                      }}
+                      onBlur={() => handleRenameChat(chat.id)}
+                      className="flex-1 px-2 py-1 text-sm border rounded"
+                      // biome-ignore lint/a11y/noAutofocus: <explanation>
+                      autoFocus
+                    />
+                  ) : (
+                    <>
+                      <SidebarMenuButton
+                        asChild
+                        isActive={pathname === `/chat/${chat.id}`}
+                        className="flex-1"
+                      >
+                        <Link href={`/chat/${chat.id}`}>
+                          <span className="truncate">{chat.title}</span>
+                        </Link>
+                      </SidebarMenuButton>
+
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            className="opacity-0 group-hover:opacity-100 size-6 p-0"
+                          >
+                            <IconDots className="size-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuItem
+                            onClick={() => startEditing(chat)}
+                            className="flex items-center gap-2"
+                          >
+                            <IconEdit className="size-4" />
+                            Rename
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                            onClick={() => handleDeleteChat(chat.id)}
+                            className="flex items-center gap-2 text-destructive"
+                          >
+                            <IconTrash className="size-4" />
+                            Delete
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </>
+                  )}
+                </div>
+              </SidebarMenuItem>
+            ))}
+          </SidebarMenu>
+        ) : (
+          <div className="flex items-center justify-center p-4">
+            <div className="text-sm text-muted-foreground">No chats yet</div>
+          </div>
+        )}
+      </SidebarContent>
       <SidebarFooter>
         <NavUser />
       </SidebarFooter>

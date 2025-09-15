@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import type { PathwayBasicInfoType } from "@/actions/admin/get-pathways-basic-info";
 import { usePathwayStore } from "@/hooks/use-pathway";
 import { usePathwayPickerDialogStore } from "@/hooks/use-pathway-picker-dialog";
+import { Button } from "../ui/button";
 import { ChatInterface } from "./chat-interface";
 import { PathwayPickerDialog } from "./pathway-picker-dialog";
 
@@ -21,21 +22,22 @@ export function ChatInitial({
   }, []);
 
   return (
-    <div>
-      <div className="flex-1 flex flex-col">
-        {pathwayId && pathwayName ? (
-          <ChatInterface />
-        ) : (
-          <div className="flex-1 h-full flex items-center justify-center">
-            <div className="text-center">
-              <h2 className="text-xl font-semibold mb-2">Select a Pathway</h2>
-              <p className="text-muted-foreground">
-                Choose a pathway to start chatting
-              </p>
-            </div>
+    <div className="flex flex-col h-full w-full">
+      {pathwayId && pathwayName ? (
+        <ChatInterface />
+      ) : (
+        <div className="flex flex-1 items-center justify-center h-full w-full">
+          <div className="text-center">
+            <h2 className="text-xl font-semibold mb-1">Select a Pathway</h2>
+            <p className="text-muted-foreground mb-4">
+              Choose a pathway to start chatting
+            </p>
+            <Button variant="outline" size="sm" onClick={toggle}>
+              Select Pathway
+            </Button>
           </div>
-        )}
-      </div>
+        </div>
+      )}
 
       <PathwayPickerDialog
         open={open}
