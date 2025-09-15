@@ -82,5 +82,9 @@ function getSystemPrompt(context: string) {
 Context:
 ${context}
 
-Please provide accurate and helpful responses based on the context provided. If the context doesn't contain relevant information, acknowledge this and provide what help you can.`;
+Please provide accurate and helpful responses based on the context provided. Also list down the sources used to answer the question in the format:
+- Source name (start time - end time)
+
+DO NOT answer outside the given context. If something is not in the context, politely say you don’t have that info.
+`;
 }

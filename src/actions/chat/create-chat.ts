@@ -16,7 +16,7 @@ export async function createChat(pathwayId: string, firstMessage: string) {
 
     const { text: generatedTitle } = await generateText({
       model: openai("gpt-4o-mini"),
-      prompt: `Generate a short, concise title (3-6 words) for a chat based on this first message: "${firstMessage}". Only return the title, nothing else.`,
+      prompt: `Generate a short, concise title (3-6 words) for a chat based on this first message: "${firstMessage}". Only return the title (without quotes), nothing else.`,
       temperature: 0.3,
     });
 
@@ -33,7 +33,6 @@ export async function createChat(pathwayId: string, firstMessage: string) {
       },
     });
 
-    // Revalidate the chats cache
     revalidateTag("chats");
 
     return {
