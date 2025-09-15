@@ -19,24 +19,24 @@ export const metadata: Metadata = {
   description: "An AI assistant for your video content.",
   robots: { index: true, follow: true },
   icons: {
-    icon: '/favicon/favicon.ico',
-    apple: '/favicon/apple-touch-icon.png',
+    icon: "/favicon/favicon.ico",
+    apple: "/favicon/apple-touch-icon.png",
   },
-  manifest: '/favicon/site.webmanifest',
+  manifest: "/favicon/site.webmanifest",
   openGraph: {
-    url: process.env.BASE_URL || 'http://localhost:3000',
+    url: process.env.BASE_URL || "http://localhost:3000",
     title: "Chai GPT",
     description: "An AI assistant for your video content.",
     siteName: "Chai GPT",
-    images: ['/logo.svg'],
-    type: 'website',
-    locale: 'en_US',
+    images: ["/logo.svg"],
+    type: "website",
+    locale: "en_US",
   },
   twitter: {
-    card: 'summary_large_image',
+    card: "summary_large_image",
     title: "Chai GPT",
     description: "An AI assistant for your video content.",
-    images: ['/logo.svg'],
+    images: ["/logo.svg"],
   },
 };
 

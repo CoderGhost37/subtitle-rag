@@ -1,4 +1,5 @@
 import { BookOpen, FileText, TrendingUp, Upload, Users } from "lucide-react";
+import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
 import { getStats } from "@/actions/admin/get-stats";
@@ -12,6 +13,11 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+
+export const metadata: Metadata = {
+  title: "Admin Dashboard",
+  description: "Overview of your RAG chatbot system",
+};
 
 export default function AdminPage() {
   return (

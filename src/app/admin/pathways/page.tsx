@@ -1,5 +1,11 @@
+import type { Metadata } from "next";
 import { PathwayDialog } from "@/components/admin/pathway/pathway-dialog-form";
 import { Pathways } from "@/components/admin/pathway/pathways";
+
+export const metadata: Metadata = {
+  title: "Learning Pathways",
+  description: "Manage and view your learning pathways",
+};
 
 export default function PathwaysPage() {
   return (
