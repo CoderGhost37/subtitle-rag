@@ -10,8 +10,10 @@ import { PathwayPickerDialog } from "./pathway-picker-dialog";
 
 export function ChatInitial({
   pathways,
+  userId,
 }: {
   pathways: PathwayBasicInfoType[];
+  userId: string;
 }) {
   const { pathwayName, pathwayId, setPathway } = usePathwayStore();
   const { open, toggle } = usePathwayPickerDialogStore();
@@ -24,7 +26,7 @@ export function ChatInitial({
   return (
     <div className="flex flex-col h-full w-full">
       {pathwayId && pathwayName ? (
-        <ChatInterface />
+        <ChatInterface userId={userId} />
       ) : (
         <div className="flex flex-1 items-center justify-center h-full w-full">
           <div className="text-center">

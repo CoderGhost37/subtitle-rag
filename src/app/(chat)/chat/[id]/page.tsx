@@ -1,4 +1,5 @@
-import { notFound } from "next/navigation";
+import { currentUser } from "@clerk/nextjs/server";
+import { notFound, redirect } from "next/navigation";
 import { getChat } from "@/actions/chat/get-chat";
 import { getChatMessages } from "@/actions/chat/get-chat-messages";
 import { ChatInterface } from "@/components/chat/chat-interface";
@@ -27,10 +28,15 @@ export const generateMetadata = async ({ params }: { params: Params }) => {
 export default async function ChatPage({ params }: { params: Params }) {
   const { id } = await params;
 
-  const [{ messages }, { success, chat }] = await Promise.all([
+  const [user, { messages }, { success, chat }] = await Promise.all([
+    currentUser(),
     getChatMessages(id),
     getChat(id),
   ]);
+
+  if (!user) {
+    redirect("/login");
+  }
 
   if (!success || !chat) {
     notFound();
@@ -39,6 +45,7 @@ export default async function ChatPage({ params }: { params: Params }) {
   return (
     <ChatInterface
       chatId={id}
+      userId={user.id}
       initialMessages={messages}
       chatPathway={chat.pathway}
     />

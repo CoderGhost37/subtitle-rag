@@ -13,6 +13,7 @@ import { ChatMessages } from "./chat-messages";
 
 interface ChatInterfaceProps {
   chatId?: string;
+  userId: string;
   initialMessages?: ChatMessage[];
   chatPathway?: {
     id: string;
@@ -23,6 +24,7 @@ interface ChatInterfaceProps {
 
 export function ChatInterface({
   chatId,
+  userId,
   initialMessages = [],
   chatPathway,
 }: ChatInterfaceProps) {
@@ -77,7 +79,7 @@ export function ChatInterface({
               parts: [{ type: "text", text: input }],
               createdAt: new Date(),
             },
-            { body: { chatId: result.chatId } },
+            { body: { chatId: result.chatId, userId } },
           );
           setInput("");
           return;
@@ -92,7 +94,7 @@ export function ChatInterface({
         parts: [{ type: "text", text: input }],
         createdAt: new Date(),
       },
-      { body: { chatId } },
+      { body: { chatId, userId } },
     );
     setInput("");
   };
