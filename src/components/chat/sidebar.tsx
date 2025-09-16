@@ -215,15 +215,13 @@ export function ChatSidebar({
           </SidebarMenuItem>
         </SidebarMenu>
 
-        {pathname === "/" && (
-          <SidebarMenu>
-            <SidebarMenuItem>
-              <SidebarMenuButton asChild>
-                <PathwaySwitcher />
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          </SidebarMenu>
-        )}
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton asChild>
+              <PathwaySwitcher disabled={pathname !== "/"} />
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
       </SidebarHeader>
 
       <SidebarContent>

@@ -7,7 +7,7 @@ import { usePathwayPickerDialogStore } from "@/hooks/use-pathway-picker-dialog";
 import { getPathwayIcon } from "@/utils/getPathwayIcon";
 import { Button } from "../ui/button";
 
-export function PathwaySwitcher() {
+export function PathwaySwitcher({ disabled }: { disabled?: boolean }) {
   const { pathwayName } = usePathwayStore();
   const { toggle } = usePathwayPickerDialogStore();
   return (
@@ -32,6 +32,7 @@ export function PathwaySwitcher() {
         size="sm"
         className="ml-2 shrink-0 bg-transparent"
         onClick={toggle}
+        disabled={disabled}
         aria-label="Switch pathway"
       >
         <ArrowLeftRight className="h-4 w-4 mr-1" />
