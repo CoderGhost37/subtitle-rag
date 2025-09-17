@@ -5,11 +5,14 @@ import {
   ChevronDown,
   ChevronRight,
   FileText,
+  Loader2,
   Trash2,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useTransition } from "react";
+import { toast } from "sonner";
+import { deleteDocumentEmbeddings } from "@/actions/admin/deleteDocumentEmbeddings";
 import type { PathwayType } from "@/actions/admin/get-pathways";
 import { Badge } from "@/components/ui/badge";
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -29,6 +32,7 @@ import { getPathwayIcon } from "@/utils/getPathwayIcon";
 
 export function Pathway({ pathway }: { pathway: PathwayType }) {
   const [open, setOpen] = useState(false);
+
   return (
     <Card className="overflow-hidden">
       <Collapsible open={open} onOpenChange={setOpen}>
@@ -92,13 +96,7 @@ export function Pathway({ pathway }: { pathway: PathwayType }) {
                         </div>
                       </div>
                     </div>
-                    <Button
-                      variant="destructive"
-                      size="icon"
-                      // onClick={() => handleDeleteDocument(doc.id, pathway.id)}
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
+                    <DeleteDocumentButton docId={doc.id} />
                   </div>
                 ))}
               </div>
@@ -121,5 +119,40 @@ export function Pathway({ pathway }: { pathway: PathwayType }) {
         </CollapsibleContent>
       </Collapsible>
     </Card>
+  );
+}
+
+function DeleteDocumentButton({ docId }: { docId: string }) {
+  const [isPending, startTransition] = useTransition();
+
+  async function handleDeleteDocument(docId: string) {
+    startTransition(() => {
+      deleteDocumentEmbeddings(docId)
+        .then((res) => {
+          if (res.success) {
+            toast.success(res.message);
+          } else {
+            toast.error(res.message);
+          }
+        })
+        .catch(() => {
+          toast.error("Something went wrong while deleting the document");
+        });
+    });
+  }
+
+  return (
+    <Button
+      variant="destructive"
+      size="icon"
+      onClick={() => handleDeleteDocument(docId)}
+      disabled={isPending}
+    >
+      {isPending ? (
+        <Loader2 className="h-4 w-4 animate-spin" />
+      ) : (
+        <Trash2 className="h-4 w-4" />
+      )}
+    </Button>
   );
 }
