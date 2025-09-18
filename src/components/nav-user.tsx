@@ -1,7 +1,12 @@
 "use client";
 
 import { useAuth, useUser } from "@clerk/nextjs";
-import { IconDotsVertical, IconLogout } from "@tabler/icons-react";
+import {
+  IconDashboard,
+  IconDotsVertical,
+  IconLogout,
+} from "@tabler/icons-react";
+import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -54,7 +59,7 @@ export function NavUser() {
                 </SidebarMenuButton>
               </DropdownMenuTrigger>
               <DropdownMenuContent
-                className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg"
+                className="w-58 rounded-lg"
                 side={isMobile ? "bottom" : "right"}
                 align="end"
                 sideOffset={4}
@@ -79,6 +84,14 @@ export function NavUser() {
                   </div>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
+                {user.publicMetadata?.role === "admin" && (
+                  <Link href="/admin">
+                    <DropdownMenuItem>
+                      <IconDashboard />
+                      Dashboard
+                    </DropdownMenuItem>
+                  </Link>
+                )}
                 <DropdownMenuItem onClick={() => signOut()}>
                   <IconLogout />
                   Log out
