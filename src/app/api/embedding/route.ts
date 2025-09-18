@@ -4,9 +4,11 @@ import { Document } from "@langchain/core/documents";
 import { OpenAIEmbeddings } from "@langchain/openai";
 import { QdrantVectorStore } from "@langchain/qdrant";
 import { RecursiveCharacterTextSplitter } from "@langchain/textsplitters";
+import { QdrantClient } from "@qdrant/js-client-rest";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { NextResponse } from "next/server";
+import { FileType } from "@/generated/prisma";
 import { db } from "@/lib/prisma";
 import { uploadSchema } from "@/schemas/upload";
 
@@ -47,6 +49,25 @@ export async function POST(req: Request) {
 
     const { pathwayId, files } = validateFields.data;
 
+    const embeddings = new OpenAIEmbeddings({
+      model: "text-embedding-3-small",
+    });
+
+    const client = new QdrantClient({
+      url: process.env.QDRANT_URL,
+      apiKey: process.env.QDRANT_API_KEY,
+    });
+
+    const vectorStore = await QdrantVectorStore.fromExistingCollection(
+      embeddings,
+      {
+        client,
+        collectionName: process.env.QDRANT_COLLECTION_NAME,
+      },
+    );
+
+    const documents = [];
+
     for (const file of files) {
       const text = await file.text();
 
@@ -74,25 +95,23 @@ export async function POST(req: Request) {
         };
       });
 
-      const embeddings = new OpenAIEmbeddings({
-        model: "text-embedding-3-small",
+      await vectorStore.addDocuments(chunksWithIds, {
+        customPayload: [{ pathwayId: pathwayId }, { sourceId: sourceId }],
       });
 
-      await QdrantVectorStore.fromDocuments(chunksWithIds, embeddings, {
-        url: process.env.QDRANT_URL,
-        collectionName: process.env.QDRANT_COLLECTION_NAME,
-      });
-
-      await db.document.create({
-        data: {
-          pathwayId,
-          name: file.name,
-          fileType: file.type === "application/x-subrip" ? "SRT" : "VTT",
-          fileSize: formatBytes(file.size),
-          sourceId,
-        },
+      documents.push({
+        pathwayId,
+        name: file.name,
+        fileType:
+          file.type === "application/x-subrip" ? FileType.SRT : FileType.VTT,
+        fileSize: formatBytes(file.size),
+        sourceId,
       });
     }
+
+    await db.document.createMany({
+      data: documents,
+    });
 
     revalidatePath("/admin");
     revalidatePath("/admin/pathways");

@@ -79,7 +79,7 @@ export function ChatInterface({
               parts: [{ type: "text", text: input }],
               createdAt: new Date(),
             },
-            { body: { chatId: result.chatId, userId } },
+            { body: { chatId: result.chatId, userId, pathwayId } },
           );
           setInput("");
           return;
@@ -94,7 +94,7 @@ export function ChatInterface({
         parts: [{ type: "text", text: input }],
         createdAt: new Date(),
       },
-      { body: { chatId, userId } },
+      { body: { chatId, userId, pathwayId } },
     );
     setInput("");
   };
