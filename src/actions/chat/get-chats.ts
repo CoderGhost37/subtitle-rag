@@ -11,6 +11,12 @@ export const getChats = unstable_cache(
           id: true,
           title: true,
           updatedAt: true,
+          pathwayId: true,
+          pathway: {
+            select: {
+              title: true,
+            },
+          },
         },
         orderBy: {
           updatedAt: "desc",
